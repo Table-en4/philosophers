@@ -1,34 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/01 15:50:39 by molapoug          #+#    #+#             */
-/*   Updated: 2025/07/03 18:52:32 by molapoug         ###   ########.fr       */
+/*   Created: 2025/04/29 19:42:46 by molapoug          #+#    #+#             */
+/*   Updated: 2025/04/30 18:07:21 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#include "libft.h"
 
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
-
-typedef struct s_philo
+void	ft_striteri(char *s, void (*f)(unsigned int, char *))
 {
-	pthread_t	philo;
-	int			philo_num;
-	char		*str;
-}	t_philo;
+	unsigned int	i;
 
-
-/* ######################### */
-/* fonction to get the error */
-/* ######################### */
-int	ft_error_fd(char *str, int fd);
-
-#endif
+	if (!s || !f)
+		return ;
+	i = 0;
+	while (s[i])
+	{
+		f(i, s + i);
+		i++;
+	}
+}

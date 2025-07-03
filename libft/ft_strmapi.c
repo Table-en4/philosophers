@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   ft_strmapi_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/01 15:50:39 by molapoug          #+#    #+#             */
-/*   Updated: 2025/07/03 18:52:32 by molapoug         ###   ########.fr       */
+/*   Created: 2025/04/30 08:48:26 by molapoug          #+#    #+#             */
+/*   Updated: 2025/04/30 18:07:37 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#include "libft.h"
 
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
-
-typedef struct s_philo
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	pthread_t	philo;
-	int			philo_num;
-	char		*str;
-}	t_philo;
+	unsigned int	i;
+	char			*str;
 
-
-/* ######################### */
-/* fonction to get the error */
-/* ######################### */
-int	ft_error_fd(char *str, int fd);
-
-#endif
+	if (!s)
+		return (NULL);
+	i = 0;
+	str = (char *)malloc(sizeof(char) * (ft_strlen(s)) + 1);
+	if (str == NULL)
+		return (NULL);
+	while (s[i] != '\0')
+	{
+		str[i] = f(i, s[i]);
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
+}

@@ -1,34 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/01 15:50:39 by molapoug          #+#    #+#             */
-/*   Updated: 2025/07/03 18:52:32 by molapoug         ###   ########.fr       */
+/*   Created: 2025/04/08 11:31:45 by molapoug          #+#    #+#             */
+/*   Updated: 2025/04/30 18:07:24 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#include "libft.h"
 
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
-
-typedef struct s_philo
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	pthread_t	philo;
-	int			philo_num;
-	char		*str;
-}	t_philo;
+	unsigned int	j;
+	int				i;
+	char			*str;
 
-
-/* ######################### */
-/* fonction to get the error */
-/* ######################### */
-int	ft_error_fd(char *str, int fd);
-
-#endif
+	if (!s1 && !s2)
+		return (NULL);
+	str = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!str)
+		return (NULL);
+	i = -1;
+	j = 0;
+	while (s1[++i])
+		str[j++] = s1[i];
+	i = -1;
+	while (s2[++i])
+		str[j++] = s2[i];
+	str[j] = '\0';
+	return (str);
+}

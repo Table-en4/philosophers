@@ -1,34 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/01 15:50:39 by molapoug          #+#    #+#             */
-/*   Updated: 2025/07/03 18:52:32 by molapoug         ###   ########.fr       */
+/*   Created: 2025/04/02 14:45:34 by molapoug          #+#    #+#             */
+/*   Updated: 2025/04/30 18:07:08 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#include "libft.h"
 
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
-
-typedef struct s_philo
+char	*ft_strchr(const char *str, int c)
 {
-	pthread_t	philo;
-	int			philo_num;
-	char		*str;
-}	t_philo;
+	int				i;
+	unsigned char	ch;
 
-
-/* ######################### */
-/* fonction to get the error */
-/* ######################### */
-int	ft_error_fd(char *str, int fd);
-
-#endif
+	i = 0;
+	ch = c;
+	if (ch == '\0')
+	{
+		i = ft_strlen(str);
+		return ((char *)str + i++);
+	}
+	while (str[i])
+	{
+		if (str[i] == ch)
+			return ((char *)str + i);
+		i++;
+	}
+	return (NULL);
+}

@@ -1,34 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/01 15:50:39 by molapoug          #+#    #+#             */
-/*   Updated: 2025/07/03 18:52:32 by molapoug         ###   ########.fr       */
+/*   Created: 2025/02/14 10:46:25 by molapoug          #+#    #+#             */
+/*   Updated: 2025/04/30 18:08:11 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#include "libft.h"
 
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
-
-typedef struct s_philo
+char	*ft_strnstr(const char *str, const char *to_find, size_t n)
 {
-	pthread_t	philo;
-	int			philo_num;
-	char		*str;
-}	t_philo;
+	size_t	i;
+	size_t	j;
 
-
-/* ######################### */
-/* fonction to get the error */
-/* ######################### */
-int	ft_error_fd(char *str, int fd);
-
-#endif
+	i = 0;
+	if (*to_find == '\0')
+		return ((char *)str);
+	while (str[i] && i < n)
+	{
+		j = 0;
+		while (to_find[j] && str[i + j] == to_find[j] && (i + j) < n)
+			j++;
+		if (to_find[j] == '\0' && to_find[j] < 1)
+		{
+			return ((char *)&str[i]);
+		}
+		i++;
+	}
+	return (0);
+}
