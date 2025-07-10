@@ -6,18 +6,17 @@
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 17:31:02 by molapoug          #+#    #+#             */
-/*   Updated: 2025/07/03 17:34:47 by molapoug         ###   ########.fr       */
+/*   Updated: 2025/07/10 14:43:07 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	ft_error_fd(char *str, int fd)
+void	ft_error(char *str, int fd)
 {
 	int	i;
 
 	i = 0;
 	while (str[i])
 		write(fd, &str[i++], 1);
-	return (fd);
 }
