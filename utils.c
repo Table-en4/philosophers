@@ -6,7 +6,7 @@
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 17:31:02 by molapoug          #+#    #+#             */
-/*   Updated: 2025/08/15 20:25:36 by molapoug         ###   ########.fr       */
+/*   Updated: 2025/08/16 14:05:42 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,32 @@ void	ft_error(char *str, int fd)
 
 int	philo_eat(t_philo *tid)
 {
-	while (tid->id)
-		tid->id++;
-	return (tid->id);
+	int	i;
+
+	i = 0;
+	while (i < tid->id)
+		i++;
+	return (i);
 }
 
 void *thread_routine(void *arg)
 {
     t_philo *philo = (t_philo *)arg;
-    pthread_mutex_lock(&philo->data->count_mutex);
-    printf("Philo %d mange\n", philo->id);
-    pthread_mutex_unlock(&philo->data->count_mutex);
+
+    philo->last_meal_time = philo->data->start_time;
+    philo->meals_eaten = 0;
+    if (philo->id % 2 == 0)
+        usleep(philo->data->time_to_eat * 500);
+    while (!philo->data->someone_died)
+    {
+        philo_eat(philo);
+        if (philo->data->nb_meals != -1 && philo->meals_eaten >= philo->data->nb_meals)
+            break;
+        print_philo(philo, "is sleeping");
+        usleep(philo->data->time_to_sleep * 1000);
+        print_philo(philo, "is thinking");
+    }
+
     return NULL;
 }
 

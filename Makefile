@@ -6,7 +6,7 @@
 #    By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/03 17:37:53 by molapoug          #+#    #+#              #
-#    Updated: 2025/08/15 17:23:58 by molapoug         ###   ########.fr        #
+#    Updated: 2025/08/16 12:28:22 by molapoug         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,10 +23,10 @@ FTPRINTF_A = $(FT_PRINTF)libftprintf.a
 
 RM = rm -f
 
-SRC = philo.c utils.c
+SRC = philo.c utils.c time_utils.c
 OBJ = $(SRC:.c=.o)
 
-BONUS_SRC = philo.c utils.c
+BONUS_SRC = philo.c utils.c time_utils.c
 
 BONUS_OBJ = $(BONUS_SRC:.c=.o)
 
