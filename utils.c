@@ -6,7 +6,7 @@
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 17:31:02 by molapoug          #+#    #+#             */
-/*   Updated: 2025/08/15 17:44:59 by molapoug         ###   ########.fr       */
+/*   Updated: 2025/08/15 20:25:36 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,13 @@ void *thread_routine(void *arg)
 
 int create_thread(t_data *data, t_philo *philos)
 {
-    int	i;
+    int i;
 	
 	i = 0;
     while (i < data->nb_philo)
     {
+        philos[i].id = i + 1;
+        philos[i].data = data;
         pthread_create(&philos[i].thread, NULL, thread_routine, &philos[i]);
         i++;
     }
@@ -53,8 +55,7 @@ int create_thread(t_data *data, t_philo *philos)
     return 0;
 }
 
-
-
+//proteger atoi et proteger creat thread
 int	ft_atoi(const char *str)
 {
 	int	i;

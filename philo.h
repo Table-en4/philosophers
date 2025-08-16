@@ -6,7 +6,7 @@
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:50:39 by molapoug          #+#    #+#             */
-/*   Updated: 2025/08/15 17:45:29 by molapoug         ###   ########.fr       */
+/*   Updated: 2025/08/15 20:25:02 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct s_philo {
     int	id;
     int	meals_eaten;
     long	last_meal_time;
-    pthread_t	*thread;
+    pthread_t	thread;
     struct s_data	*data;
 } t_philo;
 
@@ -47,7 +47,6 @@ typedef struct s_data {
 	pthread_mutex_t	count_mutex;
 	unsigned int	count;
 } t_data;
-
 
 /* ######################### */
 /* fonction to get the error */
