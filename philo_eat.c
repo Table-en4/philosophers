@@ -6,7 +6,7 @@
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 13:48:33 by molapoug          #+#    #+#             */
-/*   Updated: 2025/08/17 19:22:49 by molapoug         ###   ########.fr       */
+/*   Updated: 2025/08/17 21:25:43 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	take_forks_left(t_philo *philo)
 {
 	int	left;
 
-	left = philo->id - 1;
+	left = philo->id;
 	if (philo->data->nb_philo == 1)
 	{
 		pthread_mutex_lock(&philo->data->forks[left]);
@@ -46,8 +46,8 @@ int	take_forks(t_philo *philo)
 	int	left;
 	int	right;
 
-	left = philo->id - 1;
-	right = philo->id % philo->data->nb_philo;
+	left = philo->id;
+	right = (philo->id + 1) % philo->data->nb_philo;
 	if (take_forks_left(philo) == 1)
 		return (1);
 	if (philo->id % 2 == 0)
@@ -72,8 +72,8 @@ void	let_forks(t_philo *philo)
 	int	left;
 	int	right;
 
-	left = philo->id - 1;
-	right = philo->id % philo->data->nb_philo;
+	left = philo->id;
+	right = (philo->id + 1) % philo->data->nb_philo;
 	pthread_mutex_unlock(&philo->data->forks[left]);
 	pthread_mutex_unlock(&philo->data->forks[right]);
 }

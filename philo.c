@@ -6,7 +6,7 @@
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 17:29:47 by molapoug          #+#    #+#             */
-/*   Updated: 2025/08/17 21:08:59 by molapoug         ###   ########.fr       */
+/*   Updated: 2025/08/17 21:19:52 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	check_args(int ac, char **av)
             return (ft_error("Letter in the argument\n", 2), 2);
         val = ft_atoi(av[i]);
         if (val <= 0)
-            return (ft_error("Number lower than 0\n", 2), 2);
+            return (ft_error("Ivalid Value provided\n", 2), 2);
         i++;
     }
     val = ft_atoi(av[1]);
