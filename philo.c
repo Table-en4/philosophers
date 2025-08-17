@@ -6,11 +6,22 @@
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 17:29:47 by molapoug          #+#    #+#             */
-/*   Updated: 2025/08/16 18:06:00 by molapoug         ###   ########.fr       */
+/*   Updated: 2025/08/17 19:35:42 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	init_mutex(t_data *data)
+{
+	if (pthread_mutex_init(&data->count_mutex, NULL) != 0)
+		return (1);
+	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
+		return (1);
+	if (pthread_mutex_init(&data->death_mutex, NULL) != 0)
+		return (1);
+	return (0);
+}
 
 int	init_data(t_data *data, char **av)
 {
@@ -23,7 +34,7 @@ int	init_data(t_data *data, char **av)
 	data->time_to_sleep = ft_atoi(av[4]);
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->nb_philo);
 	if (!data->forks)
-		return (ft_error("Erreur de malloc dans les forks", 2), 2);
+		return (ft_error("Erreur de malloc dans les forks\n", 2), 2);
 	while (i < data->nb_philo)
 	{
 		pthread_mutex_init(&data->forks[i], NULL);
@@ -35,11 +46,7 @@ int	init_data(t_data *data, char **av)
 		data->nb_meals = -1;
 	data->someone_died = 0;
 	data->start_time = get_time();
-	if (pthread_mutex_init(&data->count_mutex, NULL) != 0)
-		return (1);
-	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
-		return (1);
-	if (pthread_mutex_init(&data->death_mutex, NULL) != 0)
+	if (init_mutex(data) == 1)
 		return (1);
 	return (0);
 }
@@ -63,6 +70,8 @@ int	main(int ac, char **av)
 	t_philo		*philos;
 	pthread_t	monitor;
 
+	if (ft_atoi(av[1]) == -1 || ft_atoi(av[1]) > 200)
+		return (ft_error("Error, number biger than 200/INT_MAX/INT_MIN\n", 2), 2);
 	if (ac < 5 || ac > 6)
 		return (ft_error("Invalid arguments\n", 2), 2);
 	if (init_data(&data, av) != 0)
@@ -71,14 +80,8 @@ int	main(int ac, char **av)
 	if (!philos)
 		return (ft_error("Malloc failed\n", 2), cleanup_data(&data), 2);
 	if (create_thread(&data, philos, &monitor) != 0)
-	{
-		free(philos);
-		cleanup_data(&data);
-		return (2);
-	}
+		return (free(philos), cleanup_data(&data), 2);
 	pthread_join(monitor, NULL);
 	join_all_threads(philos, data.nb_philo);
-	free(philos);
-	cleanup_data(&data);
-	return (0);
+	return (free(philos), cleanup_data(&data), 0);
 }

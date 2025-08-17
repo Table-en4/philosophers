@@ -6,7 +6,7 @@
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 12:16:11 by molapoug          #+#    #+#             */
-/*   Updated: 2025/08/16 18:47:55 by molapoug         ###   ########.fr       */
+/*   Updated: 2025/08/17 17:29:23 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,15 @@ long	time_diff(long start, long end)
 	return (end - start);
 }
 
-void	ft_usleep(long time)
+void	ft_usleep(long time, t_data *data)
 {
 	long	start;
 
 	start = get_time();
 	while (get_time() - start < time)
-		usleep(500);
+	{
+		if (is_dead(data))
+			break ;
+		usleep(100);
+	}
 }

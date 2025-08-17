@@ -6,7 +6,7 @@
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 17:31:02 by molapoug          #+#    #+#             */
-/*   Updated: 2025/08/16 18:48:33 by molapoug         ###   ########.fr       */
+/*   Updated: 2025/08/17 19:23:08 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,27 +23,29 @@ void	ft_error(char *str, int fd)
 
 void	*thread_routine(void *arg)
 {
-	t_philo	*philo;
+	t_philo	*p;
 
-	philo = (t_philo *)arg;
-	pthread_mutex_lock(&philo->data->death_mutex);
-	philo->last_meal_time = philo->data->start_time;
-	philo->meals_eaten = 0;
-	pthread_mutex_unlock(&philo->data->death_mutex);
-	if (philo->id % 2 == 0)
-		ft_usleep(philo->data->time_to_eat * 500);
-	while (!is_dead(philo->data))
+	p = (t_philo *)arg;
+	pthread_mutex_lock(&p->data->death_mutex);
+	p->last_meal_time = get_time();
+	p->meals_eaten = 0;
+	pthread_mutex_unlock(&p->data->death_mutex);
+	if (p->id % 2 == 0)
+		ft_usleep(p->data->time_to_die / 2, p->data);
+	while (!is_dead(p->data))
 	{
-		philo_eat(philo);
-		if (philo->data->nb_meals != -1 && philo->meals_eaten >= philo->data->nb_meals)
+		philo_eat(p);
+		if (p->data->nb_meals != -1 && p->meals_eaten >= p->data->nb_meals)
 			break ;
-		if (is_dead(philo->data))
+		if (is_dead(p->data))
 			break ;
-		print_philo(philo, "is sleeping");
-		ft_usleep(philo->data->time_to_sleep * 1000);
-		if (is_dead(philo->data))
+		print_philo(p, "is sleeping");
+		ft_usleep(p->data->time_to_sleep, p->data);
+		if (is_dead(p->data))
 			break ;
-		print_philo(philo, "is thinking");
+		print_philo(p, "is thinking");
+		if (p->data->nb_philo % 2 == 1)
+			ft_usleep(p->data->time_to_eat, p->data);
 	}
 	return (NULL);
 }
@@ -67,7 +69,7 @@ void	*monitor_routine(void *arg)
 			}
 			i++;
 		}
-		ft_usleep(1000);
+		ft_usleep(1000, philos->data);
 	}
 	return (NULL);
 }
@@ -95,29 +97,4 @@ void	join_all_threads(t_philo *philos, int nb_philo)
 	i = 0;
 	while (i < nb_philo)
 		pthread_join(philos[i++].thread, NULL);
-}
-
-int	ft_atoi(const char *str)
-{
-	int	i;
-	int	result;
-	int	sign;
-
-	i = 0;
-	result = 0;
-	sign = 1;
-	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
-		i++;
-	if (str[i] == '-' || str[i] == '+')
-	{
-		if (str[i] == '-')
-			sign *= -1;
-		i++;
-	}
-	while (str[i] >= '0' && str[i] <= '9')
-	{
-		result = result * 10 + str[i] - '0';
-		i++;
-	}
-	return (result * sign);
 }

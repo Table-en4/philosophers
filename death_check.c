@@ -6,20 +6,55 @@
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:02:49 by molapoug          #+#    #+#             */
-/*   Updated: 2025/08/16 18:07:34 by molapoug         ###   ########.fr       */
+/*   Updated: 2025/08/17 19:25:58 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+int	ft_overflow(long result, int sign)
+{
+	if ((sign == 1 && result > INT_MAX)
+		|| (sign == -1 && - result < INT_MIN))
+		return (1);
+	return (0);
+}
+
+int	ft_atoi(const char *str)
+{
+	int		i;
+	int		sign;
+	long	result;
+
+	i = 0;
+	result = 0;
+	sign = 1;
+	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		result = result * 10 + (str[i] - '0');
+		if (ft_overflow(result, sign))
+			return (-1);
+		i++;
+	}
+	return ((int)(result * sign));
+}
+
 int	is_dead(t_data *data)
 {
-	int	result;
+	int	dead;
 
 	pthread_mutex_lock(&data->death_mutex);
-	result = data->someone_died;
+	dead = data->someone_died;
 	pthread_mutex_unlock(&data->death_mutex);
-	return (result);
+	return (dead);
 }
 
 void	set_death(t_data *data)
@@ -32,13 +67,15 @@ void	set_death(t_data *data)
 int	check_death(t_philo *philo)
 {
 	long	current_time;
-	long	time_since_meal;
+	long	time_to_live;
+	int		time_to_die;
 
 	pthread_mutex_lock(&philo->data->death_mutex);
 	current_time = get_time();
-	time_since_meal = current_time - philo->last_meal_time;
+	time_to_live = current_time - philo->last_meal_time;
+	time_to_die = philo->data->time_to_die;
 	pthread_mutex_unlock(&philo->data->death_mutex);
-	if (time_since_meal >= philo->data->time_to_die)
+	if (time_to_live > time_to_die)
 		return (1);
 	return (0);
 }

@@ -6,24 +6,25 @@
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:50:39 by molapoug          #+#    #+#             */
-/*   Updated: 2025/08/16 18:45:19 by molapoug         ###   ########.fr       */
+/*   Updated: 2025/08/17 15:11:37 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-#define NC "\e[0m"
-#define YELLOW "\e[33m"
-#define BYELLOW "\e[1;33m"
-#define RED "\e[31m"
-#define GREEN "\e[32m"
+# define NC "\e[0m"
+# define YELLOW "\e[33m"
+# define BYELLOW "\e[1;33m"
+# define RED "\e[31m"
+# define GREEN "\e[32m"
 
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
-#include <sys/time.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <pthread.h>
+# include <sys/time.h>
+# include <limits.h>
 
 typedef struct s_philo {
 	int				id;
@@ -70,7 +71,7 @@ int		ft_atoi(const char *str);
 /* ############## */
 long	get_time(void);
 long	time_diff(long start, long end);
-void	ft_usleep(long time);
+void	ft_usleep(long time, t_data *data);
 
 /* ################### */
 /* Philosopher actions */
