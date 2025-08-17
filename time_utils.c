@@ -6,11 +6,27 @@
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 12:16:11 by molapoug          #+#    #+#             */
-/*   Updated: 2025/08/17 17:29:23 by molapoug         ###   ########.fr       */
+/*   Updated: 2025/08/17 21:09:08 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int  ft_is_digit(char *str)
+{
+    int i;
+
+    i = 0;
+    if (!str[i])
+        return (0);
+    while (str[i])
+    {
+        if (str[i] < '0' || str[i] > '9')
+            return (0);
+        i++;
+    }
+    return (1);
+}
 
 long	get_time(void)
 {

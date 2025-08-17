@@ -6,7 +6,7 @@
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:50:39 by molapoug          #+#    #+#             */
-/*   Updated: 2025/08/17 15:11:37 by molapoug         ###   ########.fr       */
+/*   Updated: 2025/08/17 21:09:03 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,10 @@ void	philo_eat(t_philo *philo);
 int		check_death(t_philo *philo);
 int		is_dead(t_data *data);
 void	set_death(t_data *data);
+
+/* ############### */
+/* parse functions */
+/* ############### */
+int		ft_is_digit(char *str);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 17:29:47 by molapoug          #+#    #+#             */
-/*   Updated: 2025/08/17 19:35:42 by molapoug         ###   ########.fr       */
+/*   Updated: 2025/08/17 21:08:59 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,37 @@ void	cleanup_data(t_data *data)
 	free(data->forks);
 }
 
+int	check_args(int ac, char **av)
+{
+    long    val;
+    int     i;
+
+    if (ac < 5 || ac > 6)
+        return (ft_error("Invalid arguments\n", 2), 2);
+    i = 1;
+    while (i < ac)
+    {
+        if (!ft_is_digit(av[i]))
+            return (ft_error("Letter in the argument\n", 2), 2);
+        val = ft_atoi(av[i]);
+        if (val <= 0)
+            return (ft_error("Number lower than 0\n", 2), 2);
+        i++;
+    }
+    val = ft_atoi(av[1]);
+    if (val > 200)
+        return (ft_error("Number bigger than 200\n", 2), 2);
+    return (0);
+}
+
 int	main(int ac, char **av)
 {
 	t_data		data;
 	t_philo		*philos;
 	pthread_t	monitor;
 
-	if (ft_atoi(av[1]) == -1 || ft_atoi(av[1]) > 200)
-		return (ft_error("Error, number biger than 200/INT_MAX/INT_MIN\n", 2), 2);
-	if (ac < 5 || ac > 6)
-		return (ft_error("Invalid arguments\n", 2), 2);
+	if (check_args(ac, av))
+		return (2);
 	if (init_data(&data, av) != 0)
 		return (ft_error("Failed to init data\n", 2), 2);
 	philos = malloc(sizeof(t_philo) * data.nb_philo);
