@@ -6,13 +6,13 @@
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 12:16:11 by molapoug          #+#    #+#             */
-/*   Updated: 2025/08/16 12:27:12 by molapoug         ###   ########.fr       */
+/*   Updated: 2025/08/16 18:47:55 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-long	get_time()
+long	get_time(void)
 {
 	struct timeval	tv;
 
@@ -25,3 +25,11 @@ long	time_diff(long start, long end)
 	return (end - start);
 }
 
+void	ft_usleep(long time)
+{
+	long	start;
+
+	start = get_time();
+	while (get_time() - start < time)
+		usleep(500);
+}

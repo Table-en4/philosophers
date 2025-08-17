@@ -6,14 +6,14 @@
 #    By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/03 17:37:53 by molapoug          #+#    #+#              #
-#    Updated: 2025/08/16 12:28:22 by molapoug         ###   ########.fr        #
+#    Updated: 2025/08/16 18:08:20 by molapoug         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
 CC = cc
-CFLAGS = -g3 -Wall -Wextra -Werror 
+CFLAGS = -g3 -Wall -Wextra -Werror
 
 LIBFT = libft/
 FT_PRINTF = ft_printf/
@@ -23,7 +23,7 @@ FTPRINTF_A = $(FT_PRINTF)libftprintf.a
 
 RM = rm -f
 
-SRC = philo.c utils.c time_utils.c
+SRC = philo.c utils.c time_utils.c philo_eat.c death_check.c
 OBJ = $(SRC:.c=.o)
 
 BONUS_SRC = philo.c utils.c time_utils.c
