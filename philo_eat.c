@@ -6,7 +6,7 @@
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 13:48:33 by molapoug          #+#    #+#             */
-/*   Updated: 2025/08/17 21:25:43 by molapoug         ###   ########.fr       */
+/*   Updated: 2025/08/18 11:17:36 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,11 @@ int	take_forks_left(t_philo *philo)
 {
 	int	left;
 
-	left = philo->id;
+	left = (philo->id - 1);
 	if (philo->data->nb_philo == 1)
 	{
 		pthread_mutex_lock(&philo->data->forks[left]);
 		print_philo(philo, "has taken a fork");
-		ft_usleep(philo->data->time_to_die * 1000, philo->data);
 		pthread_mutex_unlock(&philo->data->forks[left]);
 		return (1);
 	}
@@ -46,9 +45,9 @@ int	take_forks(t_philo *philo)
 	int	left;
 	int	right;
 
-	left = philo->id;
-	right = (philo->id + 1) % philo->data->nb_philo;
-	if (take_forks_left(philo) == 1)
+	left = (philo->id - 1);
+	right = (philo->id) % philo->data->nb_philo;
+	if (take_fork_order(philo) == 1)
 		return (1);
 	if (philo->id % 2 == 0)
 	{
@@ -72,8 +71,8 @@ void	let_forks(t_philo *philo)
 	int	left;
 	int	right;
 
-	left = philo->id;
-	right = (philo->id + 1) % philo->data->nb_philo;
+	left = (philo->id - 1);
+	right = (philo->id) % philo->data->nb_philo;
 	pthread_mutex_unlock(&philo->data->forks[left]);
 	pthread_mutex_unlock(&philo->data->forks[right]);
 }
@@ -82,11 +81,13 @@ void	philo_eat(t_philo *philo)
 {
 	if (take_forks(philo) == 1)
 		return ;
-	print_philo(philo, "is eating");
 	pthread_mutex_lock(&philo->data->death_mutex);
 	philo->last_meal_time = get_time();
-	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->data->death_mutex);
+	print_philo(philo, "is eating");
+	pthread_mutex_lock(&philo->meal_mutex);
+	philo->meals_eaten++;
+	pthread_mutex_unlock(&philo->meal_mutex);
 	ft_usleep(philo->data->time_to_eat, philo->data);
 	let_forks(philo);
 }

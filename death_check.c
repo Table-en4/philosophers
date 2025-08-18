@@ -6,7 +6,7 @@
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:02:49 by molapoug          #+#    #+#             */
-/*   Updated: 2025/08/17 20:55:06 by molapoug         ###   ########.fr       */
+/*   Updated: 2025/08/18 11:14:21 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 int	ft_overflow(long result, int sign)
 {
-	if ((sign == 1 && result > INT_MAX)
-		|| (sign == -1 && - result < INT_MIN))
+	if ((sign == 1 && result > INT_MAX) || (sign == -1 && - result < INT_MIN))
 		return (1);
 	return (0);
 }
@@ -68,14 +67,14 @@ int	check_death(t_philo *philo)
 {
 	long	current_time;
 	long	time_to_live;
-	int		time_to_die;
+	long	last_meal;
 
-	pthread_mutex_lock(&philo->data->death_mutex);
 	current_time = get_time();
-	time_to_live = current_time - philo->last_meal_time;
-	time_to_die = philo->data->time_to_die;
+	pthread_mutex_lock(&philo->data->death_mutex);
+	last_meal = philo->last_meal_time;
 	pthread_mutex_unlock(&philo->data->death_mutex);
-	if (time_to_live > time_to_die)
+	time_to_live = current_time - last_meal;
+	if (time_to_live > philo->data->time_to_die)
 		return (1);
 	return (0);
 }

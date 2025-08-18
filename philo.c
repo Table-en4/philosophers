@@ -6,7 +6,7 @@
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 17:29:47 by molapoug          #+#    #+#             */
-/*   Updated: 2025/08/17 21:19:52 by molapoug         ###   ########.fr       */
+/*   Updated: 2025/08/18 11:15:56 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,32 +66,32 @@ void	cleanup_data(t_data *data)
 
 int	check_args(int ac, char **av)
 {
-    long    val;
-    int     i;
+	long	val;
+	int		i;
 
-    if (ac < 5 || ac > 6)
-        return (ft_error("Invalid arguments\n", 2), 2);
-    i = 1;
-    while (i < ac)
-    {
-        if (!ft_is_digit(av[i]))
-            return (ft_error("Letter in the argument\n", 2), 2);
-        val = ft_atoi(av[i]);
-        if (val <= 0)
-            return (ft_error("Ivalid Value provided\n", 2), 2);
-        i++;
-    }
-    val = ft_atoi(av[1]);
-    if (val > 200)
-        return (ft_error("Number bigger than 200\n", 2), 2);
-    return (0);
+	if (ac < 5 || ac > 6)
+		return (ft_error("Invalid arguments\n", 2), 2);
+	i = 1;
+	while (i < ac)
+	{
+		if (!ft_is_digit(av[i]))
+			return (ft_error("Letter in the argument\n", 2), 2);
+		val = ft_atoi(av[i]);
+		if (val <= 0)
+			return (ft_error("Ivalid Value provided\n", 2), 2);
+		i++;
+	}
+	val = ft_atoi(av[1]);
+	if (val > 200)
+		return (ft_error("Number bigger than 200\n", 2), 2);
+	return (0);
 }
 
 int	main(int ac, char **av)
 {
+	pthread_t	monitor;
 	t_data		data;
 	t_philo		*philos;
-	pthread_t	monitor;
 
 	if (check_args(ac, av))
 		return (2);

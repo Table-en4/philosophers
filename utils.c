@@ -5,96 +5,85 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/03 17:31:02 by molapoug          #+#    #+#             */
-/*   Updated: 2025/08/17 19:23:08 by molapoug         ###   ########.fr       */
+/*   Created: 2025/08/18 13:52:16 by molapoug          #+#    #+#             */
+/*   Updated: 2025/08/18 17:35:26 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	ft_error(char *str, int fd)
+int	handle_philo_death(t_philo *philos, int i)
 {
-	int	i;
+	long	time;
 
-	i = 0;
-	while (str[i])
-		write(fd, &str[i++], 1);
-}
-
-void	*thread_routine(void *arg)
-{
-	t_philo	*p;
-
-	p = (t_philo *)arg;
-	pthread_mutex_lock(&p->data->death_mutex);
-	p->last_meal_time = get_time();
-	p->meals_eaten = 0;
-	pthread_mutex_unlock(&p->data->death_mutex);
-	if (p->id % 2 == 0)
-		ft_usleep(p->data->time_to_die / 2, p->data);
-	while (!is_dead(p->data))
+	if (check_death(&philos[i]))
 	{
-		philo_eat(p);
-		if (p->data->nb_meals != -1 && p->meals_eaten >= p->data->nb_meals)
-			break ;
-		if (is_dead(p->data))
-			break ;
-		print_philo(p, "is sleeping");
-		ft_usleep(p->data->time_to_sleep, p->data);
-		if (is_dead(p->data))
-			break ;
-		print_philo(p, "is thinking");
-		if (p->data->nb_philo % 2 == 1)
-			ft_usleep(p->data->time_to_eat, p->data);
-	}
-	return (NULL);
-}
-
-void	*monitor_routine(void *arg)
-{
-	t_philo	*philos;
-	int		i;
-
-	philos = (t_philo *)arg;
-	while (!is_dead(philos[0].data))
-	{
-		i = 0;
-		while (i < philos[0].data->nb_philo)
+		pthread_mutex_lock(&philos[0].data->print_mutex);
+		if (!is_dead(philos[0].data))
 		{
-			if (check_death(&philos[i]))
-			{
-				print_philo(&philos[i], "died");
-				set_death(philos[0].data);
-				return (NULL);
-			}
-			i++;
+			time = get_time() - philos[0].data->start_time;
+			printf("%ld %d died\n", time, philos[i].id);
 		}
-		ft_usleep(1000, philos->data);
+		pthread_mutex_unlock(&philos[0].data->print_mutex);
+		set_death(philos[0].data);
+		return (1);
 	}
-	return (NULL);
-}
-
-int	create_thread(t_data *data, t_philo *philos, pthread_t *monitor)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->nb_philo)
-	{
-		philos[i].id = i + 1;
-		philos[i].data = data;
-		pthread_create(&philos[i].thread, NULL, thread_routine, &philos[i]);
-		i++;
-	}
-	pthread_create(monitor, NULL, monitor_routine, philos);
 	return (0);
 }
 
-void	join_all_threads(t_philo *philos, int nb_philo)
+void	thinking_philo(t_philo *philo, void *arg)
+{
+	philo = (t_philo *)arg;
+	philo->meals_eaten = 0;
+	pthread_mutex_lock(&philo->data->death_mutex);
+	philo->last_meal_time = get_time();
+	pthread_mutex_unlock(&philo->data->death_mutex);
+	if (philo->id % 2 == 1)
+	{
+		print_philo(philo, "is thinking");
+		usleep(1000);
+	}
+}
+
+int	take_fork_order(t_philo *philo)
+{
+	int	left;
+
+	left = (philo->id - 1);
+	if (philo->data->nb_philo == 1)
+	{
+		pthread_mutex_lock(&philo->data->forks[left]);
+		print_philo(philo, "has taken a fork");
+		ft_usleep(philo->data->time_to_die + 1, philo->data);
+		pthread_mutex_unlock(&philo->data->forks[left]);
+		return (1);
+	}
+	return (0);
+}
+
+int	check_philo_death_and_meals(t_philo *philos)
 {
 	int	i;
+	int	full_count;
 
 	i = 0;
-	while (i < nb_philo)
-		pthread_join(philos[i++].thread, NULL);
+	full_count = 0;
+	while (i < philos[0].data->nb_philo)
+	{
+		if (handle_philo_death(philos, i))
+			return (1);
+		pthread_mutex_lock(&philos[i].meal_mutex);
+		if (philos[0].data->nb_meals != -1
+			&& philos[i].meals_eaten >= philos[0].data->nb_meals)
+			full_count++;
+		pthread_mutex_unlock(&philos[i].meal_mutex);
+		i++;
+	}
+	if (philos[0].data->nb_meals != -1
+		&& full_count == philos[0].data->nb_philo)
+	{
+		set_death(philos[0].data);
+		return (1);
+	}
+	return (0);
 }

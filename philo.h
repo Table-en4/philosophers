@@ -6,7 +6,7 @@
 /*   By: molapoug <molapoug@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:50:39 by molapoug          #+#    #+#             */
-/*   Updated: 2025/08/17 21:09:03 by molapoug         ###   ########.fr       */
+/*   Updated: 2025/08/18 15:53:20 by molapoug         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,18 @@
 # include <sys/time.h>
 # include <limits.h>
 
-typedef struct s_philo {
+typedef struct s_philo
+{
 	int				id;
 	int				meals_eaten;
 	long			last_meal_time;
+	pthread_mutex_t	meal_mutex;
 	pthread_t		thread;
 	struct s_data	*data;
 }	t_philo;
 
-typedef struct s_data {
+typedef struct s_data
+{
 	int				nb_philo;
 	int				time_to_die;
 	int				time_to_eat;
@@ -80,6 +83,7 @@ void	print_philo(t_philo *philo, char *message);
 int		take_forks(t_philo *philo);
 void	let_forks(t_philo *philo);
 void	philo_eat(t_philo *philo);
+void	cleanup_philos(t_philo *philos, int nb_philo);
 
 /* ########### */
 /* Death check */
@@ -92,5 +96,13 @@ void	set_death(t_data *data);
 /* parse functions */
 /* ############### */
 int		ft_is_digit(char *str);
+
+/* ################# */
+/*  utils functions  */
+/* ################# */
+int		handle_philo_death(t_philo *philos, int i);
+void	thinking_philo(t_philo *philo, void *arg);
+int		take_fork_order(t_philo *philo);
+int		check_philo_death_and_meals(t_philo *philos);
 
 #endif

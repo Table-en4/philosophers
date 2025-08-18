@@ -23,7 +23,7 @@ FTPRINTF_A = $(FT_PRINTF)libftprintf.a
 
 RM = rm -f
 
-SRC = philo.c utils.c time_utils.c philo_eat.c death_check.c
+SRC = philo.c monitoring.c time_utils.c philo_eat.c death_check.c utils.c
 OBJ = $(SRC:.c=.o)
 
 BONUS_SRC = philo.c utils.c time_utils.c
